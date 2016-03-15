@@ -1,4 +1,4 @@
-package com.example.yaoxinxin.imagescan.adapter;
+package com.example.yaoxinxin.imagescan.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -141,6 +141,20 @@ public class NativeImageLoader {
         return BitmapFactory.decodeFile(path, options);
 
     }
+
+    /**
+     * 本地加载
+     *
+     * @param path
+     * @return
+     */
+    private Bitmap getFromFile(String path) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        return BitmapFactory.decodeFile(path, options);
+
+    }
+
 
     /**
      * 等比缩放图片

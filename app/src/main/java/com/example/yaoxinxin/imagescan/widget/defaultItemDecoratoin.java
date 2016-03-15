@@ -52,15 +52,47 @@ public class defaultItemDecoratoin extends RecyclerView.ItemDecoration {
         if (mOrientation == VERTICAL) {
             drawVertical(c, parent);
         } else {
-            drawHoritation(c, parent);
+            drawHoritentation(c, parent);
         }
     }
 
-    private void drawHoritation(Canvas c, RecyclerView parent) {
+    private void drawHoritentation(Canvas c, RecyclerView parent) {
+
+        int top = parent.getTop();
+        int bottom = parent.getHeight() - parent.getPaddingBottom();
+
+        int count = parent.getChildCount();
+
+        for (int i = 0; i < count; i++) {
+            View child = parent.getChildAt(i);
+
+            RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
+            int left = child.getWidth() + params.rightMargin;
+            int right = left + mDivider.getIntrinsicWidth();
+
+            mDivider.setBounds(left, top, right, bottom);
+            mDivider.draw(c);
+        }
 
     }
 
     private void drawVertical(Canvas c, RecyclerView parent) {
+
+        int left = parent.getPaddingLeft();
+        int right = parent.getWidth() - parent.getPaddingRight();
+
+        int count = parent.getChildCount();
+
+        for (int i = 0; i < count; i++) {
+
+            View child = parent.getChildAt(i);
+            RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
+            int top = child.getBottom() + params.bottomMargin;
+            int bottom = top + mDivider.getIntrinsicHeight();
+            mDivider.setBounds(left, top, right, bottom);
+            mDivider.draw(c);
+        }
+
 
     }
 
@@ -71,6 +103,11 @@ public class defaultItemDecoratoin extends RecyclerView.ItemDecoration {
 
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-        super.getItemOffsets(outRect, view, parent, state);
+//        super.getItemOffsets(outRect, view, parent, state);
+        if (mOrientation == VERTICAL) {
+            outRect.set(0, 0, 0, mDivider.getIntrinsicHeight());
+        } else {
+            outRect.set(0, 0, mDivider.getIntrinsicWidth(), 0);
+        }
     }
 }

@@ -12,6 +12,7 @@ import android.os.Message;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
@@ -21,6 +22,7 @@ import android.view.View;
 import com.example.yaoxinxin.imagescan.bean.ImageBean;
 import com.example.yaoxinxin.imagescan.adapter.ImageBeanAdapter;
 import com.example.yaoxinxin.imagescan.R;
+import com.example.yaoxinxin.imagescan.widget.defaultItemDecoratoin;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -186,11 +188,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void initView() {
         ActionBar bar = getActionBar();
-        mDialog = ProgressDialog.show(this,"","加载中...");
+        mDialog = ProgressDialog.show(this, "", "加载中...");
 //        bar.setDisplayHomeAsUpEnabled(true);
 
         mRecyclerView = (RecyclerView) this.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        mRecyclerView.addItemDecoration(new defaultItemDecoratoin(this, LinearLayoutManager.VERTICAL));
 //        mRecyclerView.addItemDecoration(new div);
 
     }

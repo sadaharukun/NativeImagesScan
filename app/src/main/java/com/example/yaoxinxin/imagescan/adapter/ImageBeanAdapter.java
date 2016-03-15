@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.yaoxinxin.imagescan.R;
 import com.example.yaoxinxin.imagescan.bean.ImageBean;
+import com.example.yaoxinxin.imagescan.utils.NativeImageLoader;
 
 import java.util.List;
 

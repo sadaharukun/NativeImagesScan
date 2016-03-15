@@ -1,15 +1,19 @@
-package com.example.yaoxinxin.imagescan.utils;
+package com.example.yaoxinxin.imagescan.adapter;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 
 import com.example.yaoxinxin.imagescan.R;
-import com.example.yaoxinxin.imagescan.adapter.NativeImageLoader;
+import com.example.yaoxinxin.imagescan.utils.NativeImageLoader;
 
 import java.util.List;
 
@@ -50,9 +54,27 @@ public class ShowImagesAdapter extends RecyclerView.Adapter<ShowImagesAdapter.My
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, int position) {
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
         final String path = mData.get(position);
         holder.mImageView.setTag(path);
+
+        //选中点击
+        holder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                useAnimation(buttonView, isChecked);
+            }
+        });
+
+        //图片点击
+        holder.mImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mListener != null) {
+                    mListener.onItemClick(v, position);
+                }
+            }
+        });
 
         Bitmap bitmap = NativeImageLoader.getInstance().loadImage(path, null, new NativeImageLoader.ImageCallBack() {
             @Override
@@ -74,7 +96,23 @@ public class ShowImagesAdapter extends RecyclerView.Adapter<ShowImagesAdapter.My
         } else {
             holder.mImageView.setImageBitmap(bitmap);
         }
-//        holder.mImageView.setImageResource(R.mipmap.ic_launcher);
+    }
+
+    /**
+     *  选中动画
+     *
+     * @param buttonView
+     * @param isChecked
+     */
+    private void useAnimation(CompoundButton buttonView, boolean isChecked) {
+
+        float values[] = new float[]{1.0f, 1.1f, 1.2f, 1.5f, 1.3f, 1.2f, 1.1f, 1.0f};
+        AnimatorSet set = new AnimatorSet();
+        set.playTogether(ObjectAnimator.ofFloat(buttonView, "scaleX", values), ObjectAnimator.ofFloat(
+                buttonView, "scaleY", values
+        ));
+
+        set.start();
     }
 
 
@@ -88,9 +126,19 @@ public class ShowImagesAdapter extends RecyclerView.Adapter<ShowImagesAdapter.My
         @Bind(R.id.image)
         ImageView mImageView;
 
+        @Bind(R.id.checkbox)
+        CheckBox mCheckBox;
+
+
         public MyViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
+    }
+
+    private ImageBeanAdapter.OnMyRecycleViewItemClickListener mListener;
+
+    public void setOnRecyclerViewItemCliclListener(ImageBeanAdapter.OnMyRecycleViewItemClickListener listener) {
+        this.mListener = listener;
     }
 }
