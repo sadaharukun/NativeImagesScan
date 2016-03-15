@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">ImageScan</string>
+    <string name="action_settings">设置</string>
+    <string name="title_activity_show_image_activivy">ShowImageActivivy</string>
+    <string name="go_back">返回
+    </string>
+</resources>
