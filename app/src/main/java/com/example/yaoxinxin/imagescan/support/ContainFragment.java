@@ -10,11 +10,16 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.yaoxinxin.imagescan.R;
-import com.example.yaoxinxin.imagescan.utils.NativeImageLoader;
+import com.example.yaoxinxin.imagescan.widget.CircleProgressView;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingProgressListener;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -28,23 +33,29 @@ import butterknife.ButterKnife;
  * create an instance of this fragment.
  */
 public class ContainFragment extends Fragment {
+
+    private static final String TAG = ContainFragment.class.getSimpleName();
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     private String mUrl;
     private String mPosition;
 
-//    @Bind(R.id.progressBar)
-//    ProgressBar mProgrssBar;
+    @Bind(R.id.progressBar)
+    CircleProgressView mProgrssBar;
 
-//    @Bind(R.id.error)
-//    TextView mError;
+    @Bind(R.id.error)
+    TextView mError;
 
-//    @Bind(R.id.wait)
-//    TextView mWait;
+    @Bind(R.id.wait)
+    TextView mWait;
+
+//    @Bind(R.id.child)
+//    FrameLayout mChild;
 
     @Bind(R.id.child)
-    FrameLayout mChild;
+    ImageView mChild;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -92,28 +103,79 @@ public class ContainFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_contain, container, false);
         ButterKnife.bind(this, view);
+
+        view.setOnClickListener(new View.OnClickListener() {//退出
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
+
+        view.setOnLongClickListener(new );
+
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        NativeImageLoader.getInstance().loadImage(mUrl, null, new NativeImageLoader.ImageCallBack() {
-            @Override
-            public void callback(String url, Bitmap bitmap) {
-                ImageView imageView = new ImageView(getActivity());
-                FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT
-                        , FrameLayout.LayoutParams.WRAP_CONTENT);
-                if (bitmap != null) {
-                    imageView.setImageBitmap(bitmap);
 
-                } else {
-                    imageView.setImageResource(R.mipmap.ic_launcher);
-                }
-                imageView.setLayoutParams(params);
-                mChild.addView(imageView);
+        mWait.setVisibility(View.VISIBLE);
+
+        DisplayImageOptions options = DisplayImageOptions.createSimple();
+        ImageLoader.getInstance().displayImage("file://" + mUrl, mChild, options, new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String imageUri, View view) {
+                mWait.setVisibility(View.INVISIBLE);
+                mProgrssBar.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                mProgrssBar.setVisibility(View.INVISIBLE);
+                mError.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                mProgrssBar.setVisibility(View.INVISIBLE);
+                mChild.setImageBitmap(loadedImage);
+            }
+
+            @Override
+            public void onLoadingCancelled(String imageUri, View view) {
+
+            }
+        }, new ImageLoadingProgressListener() {
+            @Override
+            public void onProgressUpdate(String imageUri, View view, int current, int total) {
+                mProgrssBar.setProgress(current);
             }
         });
+//        Bitmap bitmap = NativeImageLoader.getInstance().loadImage(mUrl, null, new NativeImageLoader.ImageCallBack() {
+//            @Override
+//            public void callback(String url, Bitmap bitmap) {
+////                ImageView imageView = new ImageView(getActivity());
+////                FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT
+////                        , FrameLayout.LayoutParams.WRAP_CONTENT);
+//                Log.e(TAG, mUrl);
+//                if (bitmap != null) {
+//                    mChild.setImageBitmap(bitmap);
+//
+//                } else {
+//                    mChild.setImageResource(R.mipmap.ic_launcher);
+//                }
+//            }
+//        });
+//
+//        mChild.setImageBitmap(bitmap);
     }
 
     public void onButtonPressed(Uri uri) {

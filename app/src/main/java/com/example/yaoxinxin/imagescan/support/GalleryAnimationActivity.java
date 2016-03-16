@@ -2,6 +2,7 @@ package com.example.yaoxinxin.imagescan.support;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
@@ -33,6 +34,10 @@ public class GalleryAnimationActivity extends FragmentActivity {
     @Bind(R.id.gallery)
     ViewPager mGallery;
 
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +56,25 @@ public class GalleryAnimationActivity extends FragmentActivity {
 
         mAdapter = new FragmentAdapter(getSupportFragmentManager(), urls, mCurrentPosition);
         mGallery.setAdapter(mAdapter);
+        mGallery.setCurrentItem(mCurrentPosition);
+        mGallery.setPageTransformer(true, new ZoomOutPageTransformer());
+
+        mGallery.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
     }
 

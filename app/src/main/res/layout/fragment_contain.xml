@@ -5,38 +5,43 @@
     tools:context="com.example.yaoxinxin.imagescan.support.ContainFragment">
 
 
-    <!--<ProgressBar-->
-        <!--android:id="@+id/progressBar"-->
-        <!--style="@android:style/Widget.ProgressBar.Small.Inverse"-->
-        <!--android:layout_width="100dp"-->
-        <!--android:layout_height="100dp"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:visibility="invisible" />-->
-
-    <!--<TextView-->
-        <!--android:id="@+id/error"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:text="@string/picture_read_failed"-->
-        <!--android:textSize="16sp"-->
-        <!--android:visibility="invisible" />-->
-
-    <!--<TextView-->
-        <!--android:id="@+id/wait"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:text="@string/wait_for_download_picture"-->
-        <!--android:textColor="@color/white"-->
-        <!--android:textSize="16sp"-->
-        <!--android:visibility="invisible" />-->
-
-    <FrameLayout
-        android:id="@+id/child"
+    <com.example.yaoxinxin.imagescan.widget.CircleProgressView
+        android:id="@+id/progressBar"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/picture_read_failed"
+        android:textSize="16sp"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/wait"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/wait_for_download_picture"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:visibility="invisible" />
+
+    <!--<FrameLayout-->
+    <!--android:id="@+id/child"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent" />-->
+    <ImageView
+        android:id="@+id/child"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:scaleType="fitCenter" />
 
 
 </FrameLayout>
