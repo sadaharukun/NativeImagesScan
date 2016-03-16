@@ -3,6 +3,7 @@ package com.example.yaoxinxin.imagescan.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -34,7 +35,9 @@ public class FragmentAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         Fragment fragment = mContainFragments.get(position);
         if (fragment == null) {
-            fragment = ContainFragment.newInstance(mData.get(position), position + "");
+            Log.e("FragmentAdapter","position="+position);
+            //如果是第一次浏览 mCurrentPosition == position;
+            fragment = ContainFragment.newInstance(mData.get(position), position + "", (mCurrentPosition == position) + "");
             mContainFragments.put(position, fragment);
         }
         return fragment;
@@ -43,6 +46,9 @@ public class FragmentAdapter extends FragmentPagerAdapter {
     @Override
     public void setPrimaryItem(ViewGroup container, int position, Object object) {
         super.setPrimaryItem(container, position, object);
+        if (object instanceof Fragment) {
+            mContainFragments.put(position, (Fragment) object);
+        }
     }
 
     @Override

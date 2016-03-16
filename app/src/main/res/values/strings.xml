@@ -11,5 +11,8 @@
 
     <string name="picture_read_failed">加载失败</string>
     <string name="wait_for_download_picture">加载中...</string>
+    <string name="copy_link_to_clipboard">复制链接</string>
+    <string name="share">分享</string>
+    <string name="copy_successfully">复制成功</string>
 
 </resources>

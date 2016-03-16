@@ -18,6 +18,7 @@ import com.example.yaoxinxin.imagescan.widget.CircleProgressView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.download.ImageDownloader;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingProgressListener;
 
@@ -38,6 +39,7 @@ public class ContainFragment extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_PARAM3 = "param3";
 
     private String mUrl;
     private String mPosition;
@@ -56,6 +58,8 @@ public class ContainFragment extends Fragment {
 
     @Bind(R.id.child)
     ImageView mChild;
+
+    private boolean mFirstPageOn;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -78,11 +82,12 @@ public class ContainFragment extends Fragment {
      * @return A new instance of fragment ContainFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ContainFragment newInstance(String param1, String param2) {
+    public static ContainFragment newInstance(String param1, String param2, String param3) {
         ContainFragment fragment = new ContainFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_PARAM3, param3);
         fragment.setArguments(args);
         return fragment;
     }
@@ -93,6 +98,7 @@ public class ContainFragment extends Fragment {
         if (getArguments() != null) {
             mUrl = getArguments().getString(ARG_PARAM1);
             mPosition = getArguments().getString(ARG_PARAM2);
+            mFirstPageOn = Boolean.getBoolean(getArguments().getString(ARG_PARAM3));
         }
 
     }
@@ -111,7 +117,7 @@ public class ContainFragment extends Fragment {
             }
         });
 
-        view.setOnLongClickListener(new );
+        view.setOnLongClickListener(new LongClickListener(getActivity(), mUrl));
 
         return view;
     }
@@ -124,13 +130,26 @@ public class ContainFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (mFirstPageOn) {
+            ((GalleryAnimationActivity) getActivity()).setAnimatorBackground().start();
+            getArguments().putString(ARG_PARAM3, !mFirstPageOn + "");
+        } else {
+            ((GalleryAnimationActivity) getActivity()).setBackgroundImmediately();
+        }
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
 
         mWait.setVisibility(View.VISIBLE);
 
-        DisplayImageOptions options = DisplayImageOptions.createSimple();
-        ImageLoader.getInstance().displayImage("file://" + mUrl, mChild, options, new ImageLoadingListener() {
+        DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true).
+                cacheOnDisk(true).bitmapConfig(Bitmap.Config.ARGB_8888).build();
+        ImageLoader.getInstance().displayImage(ImageDownloader.Scheme.FILE.wrap(mUrl), mChild, options,
+                new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
                 mWait.setVisibility(View.INVISIBLE);

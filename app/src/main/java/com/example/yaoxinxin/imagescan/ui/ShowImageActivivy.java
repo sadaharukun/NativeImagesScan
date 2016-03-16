@@ -1,6 +1,7 @@
 package com.example.yaoxinxin.imagescan.ui;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -100,11 +101,14 @@ public class ShowImageActivivy extends AppCompatActivity {
             public void onItemClick(View itemView, int position) {
                 Intent intent = new Intent(ShowImageActivivy.this, GalleryAnimationActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putStringArrayList("paths", (ArrayList<String>)paths);
+                bundle.putStringArrayList("paths", (ArrayList<String>) paths);
                 bundle.putInt("currentPosition", position);
                 intent.putExtras(bundle);
-                Log.e(TAG,"clickclick");
+                Log.e(TAG, "clickclick");
                 startActivity(intent);
+                if (Build.VERSION.SDK_INT > 5) {
+                    overridePendingTransition(R.anim.zoomin, R.anim.zoomout);
+                }
 
             }
         });
